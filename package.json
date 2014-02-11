@@ -1,0 +1,36 @@
+{
+  "name": "gridrunner-node-rtlsdr",
+  "description": "Enables you to use RTL-SDR dongles as a software defined radio",
+  "version": "0.0.1",
+  "homepage": "http://www.gridrunner.net",
+  "author": {
+    "name": "Darren White",
+    "email": "darren@gridrunner.net"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:gridrunnernet/gridrunner-node-sdrrtl.git"
+  },
+  "bugs": {
+    "url": "https://github.com/gridrunnernet/gridrunner-node-sdrrtl/issues"
+  },
+  "licenses": [
+    {
+      "type": "GPL",
+      "url": "https://www.gnu.org/licenses/gpl.html"
+    }
+  ],
+  "main": "lib/main.cc",
+  "engines": {
+    "node": ">= 0.9.0"
+  },
+  "scripts": {
+    "test": "grunt nodeunit"
+  },
+  "devDependencies": {
+    "amdefine":">0.0.0"
+  },
+  "keywords": []
+}
+
+
