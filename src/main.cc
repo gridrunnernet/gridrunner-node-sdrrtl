@@ -59,18 +59,10 @@ Handle<Value> DongleOpen(const Arguments& args) {
       else{
         int di = args[0]->NumberValue();
         int result = rtlsdr_open(&dev, di);
-            if ( args[1]-> IsFunction() ){
-                if (result<0){
-                    myerror=String::New("Error opening dongle - is it plugged in?");
-                }
-                else{
-                    mydata=String::New(rtlsdr_get_device_name(di));
-                };
-                dataCallback=Persistent<Function>::New(Handle<Function>::Cast(args[1]));
-                Local<Value> argv[2] = { myerror, mydata};
-                mycontext = Context::GetCurrent();
-                dataCallback->Call(mycontext->Global(), 2, argv);
-            }
+
+        if (result < 0){
+            ThrowException(Exception::TypeError(String::New("Couldn't open dongle - is it plugged in?")));
+        }
       }
      return scope.Close(String::New("Dongle Open"));
 }
@@ -273,6 +265,7 @@ void DongleStartRead(uv_work_t* req) {
 
 Handle<Value> DongleReadAsync(const Arguments& args) {
     HandleScope scope;
+    dataCallback=Persistent<Function>::New(Handle<Function>::Cast(args[0]));
     uv_work_t* req = new uv_work_t();
     req->data = dev;
     uv_queue_work(uv_default_loop(), req, DongleStartRead,DongleAfterRead );
