@@ -9,17 +9,9 @@ var dongle = require('../build/Release/gridrunner-node-sdrrtl');
 
     exports.opendongle = function(test){
         test.expect(1);
-        dongle.DongleOpen(0,function(err,data){
-            if(err){
-                console.log(err);
-                test.ok(false,"Couldn't open dongle");
-                test.done();
-            }
-            else{
-                test.ok(true,"Dongle opened ok "+data);
-                test.done();
-            }
-        });
+        dongle.DongleOpen(0);
+        test.ok(true,"Dongle opened ok");
+        test.done();
     };
 
     exports.setfrequency = function(test){
@@ -67,7 +59,6 @@ exports.gaincontolcheck = function(test){
     dongle.DongleSetTunerGain(mygain);
     var actual = dongle.DongleGetTunerGain();
     test.ok((actual==mygain), "Couldn't set manual gain");
-
     test.done();
 };
 
@@ -101,5 +92,37 @@ exports.closedongle = function(test){
         }
     });
 };
+
+exports.streamtest = function(test){
+    test.expect(1);
+
+    var ondata = function(err,data){
+        dongle.DongleClose();
+        if(err){
+            test.ok(false,"Couldn't read data");
+        }
+        else{
+            console.log("HERE");
+            test.ok(true,"Called back with data");
+            dongle.DongleStopRead();
+            dongle.DongleClose();
+            test.done();
+        }
+    };
+
+
+    dongle.DongleOpen(0);
+    var frequency=88910000; //specified in HZ
+    dongle.DongleSetCenterFreq(frequency);
+    dongle.DongleSetSampleRate(2048000);
+    dongle.DongleTestModeOn();
+    dongle.DongleResetBuffer();
+    console.log(dongle.DongleReadAsync(ondata));
+
+
+};
+
+
+
 
 
