@@ -52,7 +52,6 @@ Handle<Value> DongleString(const Arguments& args) {
 Handle<Value> DongleOpen(const Arguments& args) {
     HandleScope scope;
     v8::Local<v8::String> myerror = String::New("");
-    v8::Local<v8::String> mydata = String::New("");
       if (args.Length() < 1|| !args[0]->IsNumber() )  {
           myerror=String::New("Specify by index number (integer) which dongle to open");
       }
@@ -305,31 +304,36 @@ Handle<Value> DongleGetTunerType(const Arguments& args) {
      return scope.Close(String::New(tunername));
 }
 
+Handle<Value> DongleStopRead(const Arguments& args) {
+    rtlsdr_cancel_async(dev);
+}
+
 void init(Handle<Object> target) {
-  NODE_SET_METHOD(target, "DongleCount", DongleCount);     //DONE
-  NODE_SET_METHOD(target, "DongleName", DongleName);       //DONE
-  NODE_SET_METHOD(target, "DongleString", DongleString);   //DONE
-  NODE_SET_METHOD(target, "DongleOpen", DongleOpen);        //DONE
-  NODE_SET_METHOD(target, "DongleClose", DongleClose);      //DONE
-  NODE_SET_METHOD(target, "DongleGetCenterFreq", DongleGetCenterFreq);  //DONE
-  NODE_SET_METHOD(target, "DongleSetCenterFreq", DongleSetCenterFreq);  //DONE
-  NODE_SET_METHOD(target, "DongleGetSampleRate", DongleGetSampleRate);  //DONE
-  NODE_SET_METHOD(target, "DongleSetSampleRate", DongleSetSampleRate);  //DONE
-  NODE_SET_METHOD(target, "DongleResetBuffer", DongleResetBuffer);  //DONE
-  NODE_SET_METHOD(target, "DongleGetFreqCorrection", DongleGetFreqCorrection); //DONE
-  NODE_SET_METHOD(target, "DongleSetFreqCorrection", DongleSetFreqCorrection); //DONE
-  NODE_SET_METHOD(target, "DongleGetDirectSampling", DongleGetDirectSampling); //DONE
-  NODE_SET_METHOD(target, "DongleDirectSamplingOff", DongleDirectSamplingOff); //DONE
-  NODE_SET_METHOD(target, "DongleDirectSamplingOn", DongleDirectSamplingOn); //DONE
-  NODE_SET_METHOD(target, "DongleManualGainOn", DongleManualGainOn);    //DONE
-  NODE_SET_METHOD(target, "DongleManualGainOff", DongleManualGainOff);  //DONE
-  NODE_SET_METHOD(target, "DongleAGGOn", DongleManualGainOff);  //DONE
-  NODE_SET_METHOD(target, "DongleGetTunerGains", DongleGetTunerGains);  //DONE
-  NODE_SET_METHOD(target, "DongleGetTunerGain", DongleGetTunerGain);    //DONE
-  NODE_SET_METHOD(target, "DongleSetTunerGain", DongleSetTunerGain);    //DONE
-  NODE_SET_METHOD(target, "DongleTestModeOn", DongleTestModeOn);       //DONE
-  NODE_SET_METHOD(target, "DongleTestModeOff", DongleTestModeOff);    //DONE
-  NODE_SET_METHOD(target, "DongleGetTunerType", DongleGetTunerType);  //DONE
+  NODE_SET_METHOD(target, "DongleCount", DongleCount);
+  NODE_SET_METHOD(target, "DongleName", DongleName);
+  NODE_SET_METHOD(target, "DongleString", DongleString);
+  NODE_SET_METHOD(target, "DongleOpen", DongleOpen);
+  NODE_SET_METHOD(target, "DongleClose", DongleClose);
+  NODE_SET_METHOD(target, "DongleGetCenterFreq", DongleGetCenterFreq);
+  NODE_SET_METHOD(target, "DongleSetCenterFreq", DongleSetCenterFreq);
+  NODE_SET_METHOD(target, "DongleGetSampleRate", DongleGetSampleRate);
+  NODE_SET_METHOD(target, "DongleSetSampleRate", DongleSetSampleRate);
+  NODE_SET_METHOD(target, "DongleResetBuffer", DongleResetBuffer);
+  NODE_SET_METHOD(target, "DongleGetFreqCorrection", DongleGetFreqCorrection);
+  NODE_SET_METHOD(target, "DongleSetFreqCorrection", DongleSetFreqCorrection);
+  NODE_SET_METHOD(target, "DongleGetDirectSampling", DongleGetDirectSampling);
+  NODE_SET_METHOD(target, "DongleDirectSamplingOff", DongleDirectSamplingOff);
+  NODE_SET_METHOD(target, "DongleDirectSamplingOn", DongleDirectSamplingOn);
+  NODE_SET_METHOD(target, "DongleManualGainOn", DongleManualGainOn);
+  NODE_SET_METHOD(target, "DongleManualGainOff", DongleManualGainOff);
+  NODE_SET_METHOD(target, "DongleAGGOn", DongleManualGainOff);
+  NODE_SET_METHOD(target, "DongleGetTunerGains", DongleGetTunerGains);
+  NODE_SET_METHOD(target, "DongleGetTunerGain", DongleGetTunerGain);
+  NODE_SET_METHOD(target, "DongleSetTunerGain", DongleSetTunerGain);
+  NODE_SET_METHOD(target, "DongleTestModeOn", DongleTestModeOn);
+  NODE_SET_METHOD(target, "DongleTestModeOff", DongleTestModeOff);
+  NODE_SET_METHOD(target, "DongleGetTunerType", DongleGetTunerType);
   NODE_SET_METHOD(target, "DongleReadAsync", DongleReadAsync);
+  NODE_SET_METHOD(target, "DongleStopRead", DongleStopRead);
 }
 NODE_MODULE(gridrunner_node_sdrrtl, init);
